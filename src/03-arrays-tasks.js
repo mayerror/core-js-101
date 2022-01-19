@@ -528,9 +528,36 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const multimap = new Map();
+  const arrayTmp = array.map((item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+    if (multimap.has(key)) {
+      const cityArr = multimap.get(key);
+      cityArr.push(value);
+      multimap.set(key, cityArr);
+    } else {
+      multimap.set(key, [value]);
+    }
+    return value;
+  });
+  if (!arrayTmp.length) {
+    return false;
+  }
+  return multimap;
 }
+
+// group([
+//   { country: 'Belarus', city: 'Brest' },
+//   { country: 'Russia', city: 'Omsk' },
+//   { country: 'Russia', city: 'Samara' },
+//   { country: 'Belarus', city: 'Grodno' },
+//   { country: 'Belarus', city: 'Minsk' },
+//   { country: 'Poland', city: 'Lodz' },
+// ],
+// (item) => item.country,
+// (item) => item.city);
 
 
 /**
@@ -546,8 +573,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.reduce((acc, curr) => acc.concat(childrenSelector(curr)), []);
 }
 
 
@@ -563,9 +590,17 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  const deepCount = indexes.length;
+  const index = indexes[0];
+  if (deepCount === 1) {
+    return arr[index];
+  }
+  indexes.shift();
+  return getElementByIndexes(arr[index], indexes);
 }
+
+// console.log(getElementByIndexes([[[1, 2, 3]]], [0, 0, 1]));
 
 
 /**
@@ -586,8 +621,15 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let arrTmp;
+  if (!(arr.length % 2)) { // even
+    arrTmp = arr.splice(0, arr.length / 2);
+    return arr.concat(arrTmp);
+  }
+  arrTmp = arr.splice(0, (arr.length - 1) / 2);
+  const endTmp = arr.splice(1);
+  return endTmp.concat(arr, arrTmp);
 }
 
 
