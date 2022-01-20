@@ -77,7 +77,7 @@ function fromJSON(proto, json) {
  *    element#id.class[attr]:pseudoClass::pseudoElement
  *              \----/\----/\----------/
  *              Can be several occurrences
- *
+ *git config --global core.autocrlf
  * All types of selectors can be combined using the combination ' ','+','~','>' .
  *
  * The task is to design a single class, independent classes or classes hierarchy
