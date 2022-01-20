@@ -54,32 +54,19 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-  // const params = JSON.parse(json, (k, v) => ({ value: v }));
   const params = JSON.parse(json, (k, v) => {
     if (k === '') { return v; }
     return {
       value: v,
       writable: true,
       configurable: true,
+      enumerable: true,
     };
   });
-  const obj = Object.create(proto, params);
+  const obj = Object.create(proto);
   Object.defineProperties(obj, params);
-  const obj2 = new Circle(10);
-  console.log(obj);
-  console.log(obj2);
   return obj;
 }
-
-const Circle = function Circle(radius) {
-  this.radius = radius;
-};
-
-Circle.prototype.getCircumference = function getCircumference() {
-  return 2 * Math.PI * this.radius;
-};
-const r = fromJSON(Circle.prototype, '{"radius":10}');
-console.log('Exceed');
 
 /**
  * Css selectors builder
