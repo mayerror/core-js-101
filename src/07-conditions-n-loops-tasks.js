@@ -302,10 +302,19 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const arr = String(ccn).split('').reverse().map((item) => +item);
+  const addArr = arr.map((item, index) => {
+    if ((index % 2)) {
+      return item * 2 > 9 ? item * 2 - 9 : item * 2;
+    }
+    return item;
+  });
+  const result = addArr.reduce((acc, curr) => acc + curr);
+  return result % 10 === 0;
 }
 
+// isCreditCardNumber(79927398713);
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -320,8 +329,13 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  if (num > 10) {
+    const arr = Array.from(String(num), Number);
+    const result = arr.reduce((a, b) => a + b);
+    return result < 10 ? result : getDigitalRoot(result);
+  }
+  return num;
 }
 
 
@@ -346,10 +360,46 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const comparison = [
+    {
+      s: '[',
+      e: ']',
+    },
+    {
+      s: '(',
+      e: ')',
+    },
+    {
+      s: '{',
+      e: '}',
+    },
+    {
+      s: '<',
+      e: '>',
+    },
+  ];
+  function isEnd(s) {
+    return comparison.some((item) => item.e === s);
+  }
+  function findPair(s) {
+    return comparison.filter((item) => item.s === s)[0].e;
+  }
+  if (str === '') return true;
+  const arr = str.split('');
+  const current = arr[0];
+  if (isEnd(current)) return false;
+  let index = -1;
+  arr.forEach((curr, i) => {
+    const next = arr[i + 1];
+    if (!isEnd(curr) && findPair(curr) === next && index === -1) {
+      index = i;
+    }
+  });
+  if (index === -1) return false;
+  arr.splice(index, 2);
+  return isBracketsBalanced(arr.join(''));
 }
-
 
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
@@ -371,8 +421,9 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  const result = num.toString(n);
+  return result;
 }
 
 
@@ -388,7 +439,7 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
+function getCommonDirectoryPath(pathes) {
   throw new Error('Not implemented');
 }
 
