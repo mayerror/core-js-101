@@ -114,7 +114,7 @@ function memoize(func) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-  return function () {
+  return () => {
     let result = false;
     for (let i = 0; i < attempts; i += 1) {
       try {
@@ -127,6 +127,7 @@ function retry(func, attempts) {
     return result;
   };
 }
+
 
 /**
  * Returns the logging wrapper for the specified method,
